@@ -1,0 +1,18 @@
+body {
+    margin: 0;
+    background-color: #ffcccc;
+    height: 100%;
+    width: 100%;
+    place-content: center;
+    place-items: center;
+    padding-top: 90px;
+}
+
+.mainSection {
+    display: block;
+    background-color: #ffcccc;
+    font-family: 'Helvetica', sans-serif;
+    text-align: center;
+    font-size: 20px;
+    color: black;
+}

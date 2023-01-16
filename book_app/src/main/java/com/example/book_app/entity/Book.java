@@ -27,4 +27,7 @@ public class Book {
     private List<String> authors;
     private String category;
     private String description;
+    @OneToMany
+    @JoinColumn(name = "reviewed_book", referencedColumnName = "reviewed_book")
+    private List<Review> reviews;
 }

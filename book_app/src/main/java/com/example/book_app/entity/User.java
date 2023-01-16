@@ -26,4 +26,7 @@ public class User {
     @OneToMany
     @JoinColumn(name = "id", referencedColumnName = "id")
     private List<Book> books;
+    @OneToMany(targetEntity = Review.class)
+    @JoinColumn(name = "author", referencedColumnName = "author")
+    private List<Review> reviews;
 }

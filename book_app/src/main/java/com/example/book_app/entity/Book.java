@@ -24,10 +24,12 @@ public class Book {
     private int page_count;
     private double average_rating;
     private String language;
-    private List<String> authors;
+    @ManyToMany(mappedBy = "books")
+    private List<Author> authors;
     private String category;
     private String description;
-    //@OneToMany
-    //@JoinColumn(name = "reviewed_book", referencedColumnName = "reviewed_book")
-    //private List<Review> reviews;
+    @ManyToMany
+    private List<User> users;
+    @OneToMany(mappedBy = "reviewed_book")
+    private List<Review> reviews;
 }

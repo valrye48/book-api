@@ -22,11 +22,8 @@ public class User {
     private String name;
     private String surname;
     private String password;
-    //??
-    @OneToMany
-    @JoinColumn(name = "id", referencedColumnName = "id")
+    @ManyToMany(mappedBy = "users")
     private List<Book> books;
-    //@OneToMany(targetEntity = Review.class)
-    //@JoinColumn(name = "author", referencedColumnName = "author")
-    //private List<Review> reviews;
+    @OneToMany(mappedBy = "author")
+    private List<Review> reviews;
 }

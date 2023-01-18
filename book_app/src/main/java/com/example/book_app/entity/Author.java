@@ -3,7 +3,7 @@ package com.example.book_app.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Date;
+import java.util.List;
 
 @NonNull
 @Getter
@@ -13,17 +13,13 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "review")
-public class Review {
-
+@Table(name = "author")
+public class Author {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Date published_date;
-    private double rating;
-    private String content;
-    @ManyToOne()
-    private User author;
-    @ManyToOne()
-    private Book reviewed_book;
+    private String name;
+    private String surname;
+    @ManyToMany(mappedBy = "authors")
+    private List<Book> books;
 }

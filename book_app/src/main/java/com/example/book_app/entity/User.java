@@ -22,11 +22,11 @@ public class User {
     private String name;
     private String surname;
     private String password;
-    //likely this doesnt work
+    //??
     @OneToMany
     @JoinColumn(name = "id", referencedColumnName = "id")
     private List<Book> books;
-    @OneToMany(targetEntity = Review.class)
-    @JoinColumn(name = "author", referencedColumnName = "author")
-    private List<Review> reviews;
+    //@OneToMany(targetEntity = Review.class)
+    //@JoinColumn(name = "author", referencedColumnName = "author")
+    //private List<Review> reviews;
 }

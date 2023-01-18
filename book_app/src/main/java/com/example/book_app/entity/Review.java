@@ -22,7 +22,6 @@ public class Review {
     private Date published_date;
     private double rating;
     private String content;
-    private User author;
-    private Book reviewed_book;
-
+    //private User author;
+    //private Book reviewed_book;
 }

@@ -22,8 +22,15 @@ public class Review {
     private Date published_date;
     private double rating;
     private String content;
-    @ManyToOne()
+    @ManyToOne
     private User author;
-    @ManyToOne()
+    @ManyToOne
     private Book reviewed_book;
+
+    public Review(Date published_date, double rating, String content) {
+        this.id = id;
+        this.published_date = published_date;
+        this.rating = rating;
+        this.content = content;
+    }
 }

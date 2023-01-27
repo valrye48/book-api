@@ -26,4 +26,12 @@ public class User {
     private List<Book> books;
     @OneToMany(mappedBy = "author")
     private List<Review> reviews;
+
+    public User(String username, String name, String surname, String password) {
+        this.id = id;
+        this.username = username;
+        this.name = name;
+        this.surname = surname;
+        this.password = password;
+    }
 }

@@ -18,6 +18,7 @@ public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(length = 600)
     private String title;
     private String published_date;
     private int page_count;
@@ -25,6 +26,7 @@ public class Book {
     private String language;
     @ManyToMany(mappedBy = "books")
     private List<Author> authors;
+    @Column(columnDefinition = "TEXT")
     private String description;
     @ManyToMany
     private List<User> users;

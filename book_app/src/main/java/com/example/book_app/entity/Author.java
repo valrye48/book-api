@@ -20,12 +20,18 @@ public class Author {
     private Long id;
     private String name;
     private String surname;
-    @ManyToMany
+    @ManyToMany(cascade=CascadeType.ALL)
     private List<Book> books;
 
     public Author(String name, String surname) {
         this.id = id;
         this.name = name;
         this.surname = surname;
+    }
+
+    public Author(String name, String surname, List<Book> books) {
+        this.name = name;
+        this.surname = surname;
+        this.books = books;
     }
 }

@@ -4,10 +4,64 @@
 <head>
     <meta charset="UTF-8">
     <title>Main page</title>
+    <link rel="stylesheet" href="home.css">
 </head>
 <body>
 <div class="mainSection">
     Your books:
+
+    <br>
+    <br>
+
+    <table class="table">
+        <tr class="table tr">
+            <th class="table td">ID</th>
+            <th class="table td">Title</th>
+            <th class="table td">Published date</th>
+            <th class="table td">Page count</th>
+            <th class="table td">Average rating</th>
+            <th class="table td">Language</th>
+            <th class="table td">Description</th>
+        </tr>
+        <tr th:each="book : ${books}" style="text-align: left; border-bottom: 2px solid black;">
+            <td class="table td" th:text="${book.id}"></td>
+
+            <td class="table td" th:text="${book.title}"></td>
+
+            <td class="table td" th:text="${book.published_date}"></td>
+
+            <td class="table td" th:text="${book.page_count}"></td>
+
+            <td class="table td" th:text="${book.average_rating}"></td>
+
+            <td class="table td" th:text="${book.language}"></td>
+
+            <td class="table td" th:text="${book.description}"></td>
+        </tr>
+    </table>
+
+    <br>
+    <br>
+
+        Add a book:
+
+        <form th:action="@{/mainPage}" th:object="${newBook}" method="post">
+            Title: <input type="text" id="title" name="title" th:field="*{title}" required>
+            <br>
+            Author: <input type="text" id="author" name="author" th:field="*{author}" required>
+            <br>
+            <input type="submit" value="Add">
+        </form>
+
+        <p th:if="${bookSaved}">Book added!</p>
+
+        <p th:if="${error}" th:text="${error}"></p>
+
+    <br>
+    <br>
+    <br>
+
+    <a href="/home">Go back</a>
 </div>
 </body>
 </html>

@@ -1,7 +1,13 @@
 package com.example.book_app.service;
 
+import com.example.book_app.dto.BookDto;
+import com.example.book_app.dto.ReviewDto;
 import com.example.book_app.dto.UserDto;
+import com.example.book_app.entity.Book;
+import com.example.book_app.entity.Review;
 import com.example.book_app.entity.User;
+import com.example.book_app.repository.BookRepository;
+import com.example.book_app.repository.ReviewRepository;
 import com.example.book_app.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,12 +25,22 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private BookRepository bookRepository;
+
+    @Autowired
+    private ReviewRepository reviewRepository;
+
     public boolean verifyUser(String username, String password) {
             var userFromDb = userRepository.findByUsername(username);
             if (userFromDb != null) {
                 return userFromDb.getPassword().equals(password);
             }
             return false;
+    }
+
+    public boolean existsByUsername(String username) {
+        return userRepository.existsByUsername(username);
     }
 
     public List<UserDto> getAllUsers() {
@@ -43,12 +59,60 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void addBooksToUser(UserDto userDto) {
-        var user = userRepository.findById(userDto.getId()).orElse(null);
-        if (user != null) {
-            //TODO: get all books and then add them by user id matching
+    public void addBookToUser(Long userId, Long bookId) {
+        var userVar = userRepository.findById(userId).orElse(null);
+        if (userVar != null) {
+            if (bookRepository.existsById(bookId)) {
+                var bookVar = bookRepository.findById(bookId).orElse(null);
+                if (userVar.getBooks().contains(bookVar)) {
+                    throw new RuntimeException("This user already owns this book.");
+                } else {
+                    if (userVar.getBooks() != null) {
+                        userVar.getBooks().add(bookVar);
+                    } else {
+                        List<Book> books = new ArrayList<>();
+                        books.add(bookVar);
+                        userVar.setBooks(books);
+                    }
+
+                    userRepository.save(userVar);
+
+                    if (bookVar.getUsers() != null) {
+                        bookVar.getUsers().add(userVar);
+                    } else {
+                        List<User> users = new ArrayList<>();
+                        users.add(userVar);
+                        bookVar.setUsers(users);
+                    }
+
+                    bookRepository.save(bookVar);
+                }
+            } else {
+                throw new RuntimeException("This book doesn't exist.");
+            }
         } else {
-            //TODO:throw an exception (error page)
+            throw new RuntimeException("This user doesn't exist.");
+        }
+    }
+
+    public void addReviewsToUser(Long userId, ReviewDto review) {
+        var userVar = userRepository.findById(userId).orElse(null);
+        var reviewVar = reviewRepository.findById(review.getId()).orElse(null);
+        if (userVar != null && reviewVar != null) {
+
+            if (userVar.getReviews() != null) {
+                userVar.getReviews().add(reviewVar);
+            } else {
+                List<Review> reviews = new ArrayList<>();
+                reviews.add(reviewVar);
+                userVar.setReviews(reviews);
+            }
+
+            reviewVar.setAuthor(userVar);
+            userRepository.save(userVar);
+            reviewRepository.save(reviewVar);
+        } else {
+            throw new RuntimeException("This user/review doesn't exist.");
         }
     }
 

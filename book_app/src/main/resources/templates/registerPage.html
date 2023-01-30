@@ -4,8 +4,27 @@
 <head>
     <meta charset="UTF-8">
     <title>Register</title>
+    <link rel="stylesheet" href="home.css">
 </head>
 <body>
-
+    <div class="mainSection">
+        <h2>Register a new user:</h2>
+        <br>
+        <form th:action="@{/register}" th:object="${newUser}" method="post">
+            Name: <input type="text" id="name" name="name" th:field="*{name}" required>
+            <br>
+            Surname: <input type="text" id="surname" name="surname" th:field="*{surname}" required>
+            <br>
+            Username: <input type="text" id="username" name="username" th:field="*{username}" required>
+            <br>
+            Password: <input type="text" id="password" name="password" th:field="*{password}" required>
+            <br>
+            <input type="submit" value="Register">
+            <br>
+            <br>
+            <p th:if="${success}">Registered successfully!</p>
+            <a href="/home">Go back</a>
+        </form>
+    </div>
 </body>
 </html>

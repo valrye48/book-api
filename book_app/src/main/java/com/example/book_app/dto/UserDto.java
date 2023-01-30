@@ -13,4 +13,11 @@ public class UserDto {
     private String name;
     private String surname;
     private String password;
+
+    public UserDto(String username, String name, String surname, String password) {
+        this.username = username;
+        this.name = name;
+        this.surname = surname;
+        this.password = password;
+    }
 }

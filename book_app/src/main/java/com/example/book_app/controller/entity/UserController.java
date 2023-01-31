@@ -23,4 +23,9 @@ public class UserController {
     public void saveUser(@RequestBody UserDto userDto) {
         userService.saveUser(userDto);
     }
+
+    @GetMapping("/getById/{id}")
+    public UserDto getUserById(@PathVariable Long id) {
+        return userService.getUserById(id);
+    }
 }

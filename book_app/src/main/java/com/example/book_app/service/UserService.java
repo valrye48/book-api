@@ -1,13 +1,9 @@
 package com.example.book_app.service;
 
-import com.example.book_app.dto.BookDto;
-import com.example.book_app.dto.ReviewDto;
 import com.example.book_app.dto.UserDto;
 import com.example.book_app.entity.Book;
-import com.example.book_app.entity.Review;
 import com.example.book_app.entity.User;
 import com.example.book_app.repository.BookRepository;
-import com.example.book_app.repository.ReviewRepository;
 import com.example.book_app.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,9 +24,6 @@ public class UserService {
     @Autowired
     private BookRepository bookRepository;
 
-    @Autowired
-    private ReviewRepository reviewRepository;
-
     public boolean verifyUser(String username, String password) {
             var userFromDb = userRepository.findByUsername(username);
             if (userFromDb != null) {
@@ -41,6 +34,15 @@ public class UserService {
 
     public boolean existsByUsername(String username) {
         return userRepository.existsByUsername(username);
+    }
+
+    public UserDto getUserById(Long id) {
+        var user = userRepository.findById(id).orElse(null);
+        return new UserDto(user.getId(),
+                user.getUsername(),
+                user.getName(),
+                user.getSurname(),
+                user.getPassword());
     }
 
     public List<UserDto> getAllUsers() {
@@ -95,24 +97,16 @@ public class UserService {
         }
     }
 
-    public void addReviewsToUser(Long userId, ReviewDto review) {
-        var userVar = userRepository.findById(userId).orElse(null);
-        var reviewVar = reviewRepository.findById(review.getId()).orElse(null);
-        if (userVar != null && reviewVar != null) {
-
-            if (userVar.getReviews() != null) {
-                userVar.getReviews().add(reviewVar);
-            } else {
-                List<Review> reviews = new ArrayList<>();
-                reviews.add(reviewVar);
-                userVar.setReviews(reviews);
+    public void removeUser(Long id) {
+        var user = userRepository.findById(id).orElse(null);
+        if (user != null) {
+            if (!user.getBooks().isEmpty()) {
+                for (Book book: user.getBooks()) {
+                    book.getUsers().remove(user);
+                    bookRepository.save(book);
+                }
             }
-
-            reviewVar.setAuthor(userVar);
-            userRepository.save(userVar);
-            reviewRepository.save(reviewVar);
-        } else {
-            throw new RuntimeException("This user/review doesn't exist.");
+            userRepository.delete(user);
         }
     }
 

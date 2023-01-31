@@ -24,8 +24,6 @@ public class User {
     private String password;
     @ManyToMany(mappedBy = "users")
     private List<Book> books;
-    @OneToMany(mappedBy = "author")
-    private List<Review> reviews;
 
     public User(String username, String name, String surname, String password) {
         this.id = id;

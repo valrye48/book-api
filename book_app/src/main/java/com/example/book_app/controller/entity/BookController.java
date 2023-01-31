@@ -4,10 +4,7 @@ import com.example.book_app.dto.ApiResultsDto;
 import com.example.book_app.dto.BookDto;
 import com.example.book_app.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -44,6 +41,19 @@ public class BookController {
     @GetMapping("/getBooksByUser/{id}")
     public List<BookDto> getBooksByUser(@PathVariable Long id) {
         return bookService.getBooksOwnedByUser(id);
+    }
+
+    @DeleteMapping("/deleteBook/{id}")
+    public void deleteBook(@PathVariable Long id) {
+        bookService.removeBook(id);
+    }
+
+    @GetMapping("/getBookById/{id}")
+    public BookDto getBookById(@PathVariable Long id) { return bookService.findBookById(id); }
+
+    @PatchMapping("/removeBookFromUser/{id}/{userId}")
+    public void removeBookFromUser(@PathVariable Long id, @PathVariable Long userId) {
+        bookService.removeBookFromUser(id, userId);
     }
 
 }

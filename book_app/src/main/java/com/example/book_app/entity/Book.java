@@ -30,8 +30,6 @@ public class Book {
     private String description;
     @ManyToMany
     private List<User> users;
-    @OneToMany(mappedBy = "reviewed_book")
-    private List<Review> reviews;
 
     public Book(String title, String published_date, int page_count, double average_rating, String language, String description) {
         this.title = title;

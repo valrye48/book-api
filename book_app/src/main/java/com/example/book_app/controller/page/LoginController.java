@@ -1,6 +1,5 @@
 package com.example.book_app.controller.page;
 
-import com.example.book_app.dto.BookDto;
 import com.example.book_app.entity.User;
 import com.example.book_app.exception.WrongLoginException;
 import com.example.book_app.repository.UserRepository;
@@ -10,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Controller
 @SessionAttributes("user")

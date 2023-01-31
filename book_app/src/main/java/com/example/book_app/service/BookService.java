@@ -5,11 +5,9 @@ import com.example.book_app.dto.BookAndUsersDto;
 import com.example.book_app.dto.BookDto;
 import com.example.book_app.entity.Author;
 import com.example.book_app.entity.Book;
-import com.example.book_app.entity.Review;
 import com.example.book_app.entity.User;
 import com.example.book_app.repository.AuthorRepository;
 import com.example.book_app.repository.BookRepository;
-import com.example.book_app.repository.ReviewRepository;
 import com.example.book_app.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -38,9 +36,6 @@ public class BookService {
 
     @Autowired
     private UserService userService;
-
-    @Autowired
-    private ReviewRepository reviewRepository;
 
     @Value("${api.key}")
     private String apiKey;
@@ -74,6 +69,17 @@ public class BookService {
             }
         }
         return result;
+    }
+
+    public BookDto findBookById(Long bookId) {
+        var book = bookRepository.findById(bookId).orElse(null);
+        return new BookDto(book.getId(),
+                book.getTitle(),
+                book.getPublished_date(),
+                book.getPage_count(),
+                book.getAverage_rating(),
+                book.getLanguage(),
+                book.getDescription());
     }
 
     public ApiResultsDto getApiResultsForBook(String title, String authorSurname) {
@@ -132,7 +138,6 @@ public class BookService {
         } else {
             var bookDB = bookRepository.findByTitle(book.getTitle());
             userService.addBookToUser(userId, bookDB.getId());
-            bookRepository.save(bookDB);
         }
     }
 
@@ -159,18 +164,19 @@ public class BookService {
             if (users != null) {
                 for (User user : users) {
                     user.getBooks().remove(book);
+                    userRepository.save(user);
                 }
             }
             var authors = book.getAuthors();
             if (authors != null) {
                 for (Author author : authors) {
                     author.getBooks().remove(book);
-                }
-            }
-            var reviews = book.getReviews();
-            if (reviews != null) {
-                for (Review review : reviews) {
-                    reviewRepository.delete(review);
+                    if (author.getBooks().isEmpty()) {
+                        authorRepository.delete(author);
+                    } else {
+                        authorRepository.save(author);
+                    }
+
                 }
             }
             bookRepository.delete(book);
@@ -183,6 +189,7 @@ public class BookService {
         if (book != null && user != null) {
             if (user.getBooks().contains(book)) {
                 user.getBooks().remove(book);
+                userRepository.save(user);
             }
             bookRepository.delete(book);
         }

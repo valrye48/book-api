@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+<html xmlns:th="http:www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Error</title>
 </head>
 <body>
-Error encountered.
+<p th:if="${error}" th:text="${error}"></p>
+<p th:unless="${error}">An unknown encountered.</p>
+
 
 
 

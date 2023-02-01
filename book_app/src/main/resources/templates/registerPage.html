@@ -23,6 +23,8 @@
             <br>
             <br>
             <p th:if="${success}">Registered successfully!</p>
+            <p th:if="${error}" th:text="${error}"></p>
+            <br>
             <a href="/home">Go back</a>
         </form>
     </div>

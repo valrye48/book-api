@@ -1,7 +1,6 @@
 package com.example.book_app.controller.page;
 
 import com.example.book_app.entity.User;
-import com.example.book_app.exception.WrongLoginException;
 import com.example.book_app.repository.UserRepository;
 import com.example.book_app.service.BookService;
 import com.example.book_app.service.UserService;
@@ -30,12 +29,13 @@ public class LoginController {
     }
 
     @PostMapping("/")
-    public String loginSubmit(@ModelAttribute User user, Model model) throws WrongLoginException {
+    public String loginSubmit(@ModelAttribute User user, Model model) {
         model.addAttribute("user", user);
         if (userService.verifyUser(user.getUsername(), user.getPassword())) {
             return "redirect:mainPage";
         } else {
-            throw new WrongLoginException();
+            model.addAttribute("error", "Wrong login and/or password.");
+            return "home";
         }
     }
 

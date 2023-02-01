@@ -22,6 +22,9 @@ body {
     background-color: #E6ECED;
     border: none;
     border-collapse: collapse;
+    width: 90%
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .table td {

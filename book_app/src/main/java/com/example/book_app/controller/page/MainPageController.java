@@ -4,6 +4,8 @@ import com.example.book_app.dto.ApiResultsDto;
 import com.example.book_app.dto.BookDto;
 import com.example.book_app.dto.NewBookDto;
 import com.example.book_app.entity.User;
+import com.example.book_app.exception.BookDoesntExistException;
+import com.example.book_app.exception.UserDoesntExistException;
 import com.example.book_app.repository.BookRepository;
 import com.example.book_app.repository.UserRepository;
 import com.example.book_app.service.BookService;
@@ -27,7 +29,7 @@ public class MainPageController {
     private BookRepository bookRepository;
 
     @GetMapping("/mainPage")
-    public String mainPage(Model model, @SessionAttribute User user) {
+    public String mainPage(Model model, @SessionAttribute User user) throws UserDoesntExistException {
         model.addAttribute("newBook", new NewBookDto());
         model.addAttribute("removedBook", new BookDto());
         var userDB = userRepository.findByUsername(user.getUsername());
@@ -37,7 +39,7 @@ public class MainPageController {
     }
 
     @PostMapping("/mainPage")
-    public String addBook(@ModelAttribute NewBookDto newBookDto, Model model, @SessionAttribute("user") User user) {
+    public String addBook(@ModelAttribute NewBookDto newBookDto, Model model, @SessionAttribute("user") User user) throws UserDoesntExistException, BookDoesntExistException {
         model.addAttribute("newBook", newBookDto);
         ApiResultsDto apiRes = bookService.getApiResultsForBook(newBookDto.getTitle(), newBookDto.getAuthor());
         if (apiRes.getItems() != null) {
@@ -51,11 +53,4 @@ public class MainPageController {
         }
         return "mainPage";
     }
-
-    /*@DeleteMapping("/mainPage")
-    public String removeBook(@ModelAttribute BookDto removedBook, Model model, @SessionAttribute("user") User user) {
-        model.addAttribute("removedBook", removedBook);
-        bookService.removeBookFromUser(bookRepository.findByTitle(removedBook.getTitle()).getId(), user.getId());
-        return "mainPage";
-    }*/
 }

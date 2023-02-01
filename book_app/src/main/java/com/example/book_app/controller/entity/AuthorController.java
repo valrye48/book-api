@@ -1,12 +1,10 @@
 package com.example.book_app.controller.entity;
 
 import com.example.book_app.dto.AuthorDto;
+import com.example.book_app.exception.AuthorDoesntExistException;
 import com.example.book_app.service.AuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,7 +21,12 @@ public class AuthorController {
     }
 
     @GetMapping("/getById/{id}")
-    public AuthorDto getById(@PathVariable Long id) {
+    public AuthorDto getById(@PathVariable Long id) throws AuthorDoesntExistException {
         return authorService.getById(id);
+    }
+
+    @DeleteMapping("/removeAuthor/{id}")
+    public void removeAuthor(@PathVariable Long id) throws AuthorDoesntExistException {
+        authorService.deleteAuthor(id);
     }
 }

@@ -3,6 +3,8 @@ package com.example.book_app.service;
 import com.example.book_app.dto.UserDto;
 import com.example.book_app.entity.Book;
 import com.example.book_app.entity.User;
+import com.example.book_app.exception.BookDoesntExistException;
+import com.example.book_app.exception.UserDoesntExistException;
 import com.example.book_app.repository.BookRepository;
 import com.example.book_app.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -36,8 +38,11 @@ public class UserService {
         return userRepository.existsByUsername(username);
     }
 
-    public UserDto getUserById(Long id) {
+    public UserDto getUserById(Long id) throws UserDoesntExistException {
         var user = userRepository.findById(id).orElse(null);
+        if (user == null) {
+            throw new UserDoesntExistException();
+        }
         return new UserDto(user.getId(),
                 user.getUsername(),
                 user.getName(),
@@ -61,7 +66,7 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void addBookToUser(Long userId, Long bookId) {
+    public void addBookToUser(Long userId, Long bookId) throws BookDoesntExistException, UserDoesntExistException {
         var userVar = userRepository.findById(userId).orElse(null);
         if (userVar != null) {
             if (bookRepository.existsById(bookId)) {
@@ -90,14 +95,14 @@ public class UserService {
                     bookRepository.save(bookVar);
                 }
             } else {
-                throw new RuntimeException("This book doesn't exist.");
+                throw new BookDoesntExistException();
             }
         } else {
-            throw new RuntimeException("This user doesn't exist.");
+            throw new UserDoesntExistException();
         }
     }
 
-    public void removeUser(Long id) {
+    public void removeUser(Long id) throws UserDoesntExistException {
         var user = userRepository.findById(id).orElse(null);
         if (user != null) {
             if (!user.getBooks().isEmpty()) {
@@ -107,7 +112,25 @@ public class UserService {
                 }
             }
             userRepository.delete(user);
+        } else {
+            throw new UserDoesntExistException();
         }
+    }
+
+    public List<UserDto> getUsersByBook(Long bookId) throws BookDoesntExistException {
+        var book = bookRepository.findById(bookId).orElse(null);
+        if (book == null) {
+            throw new BookDoesntExistException();
+        }
+        List<UserDto> result = new ArrayList<>();
+        for (User user : book.getUsers()) {
+            result.add(new UserDto(user.getId(),
+                    user.getUsername(),
+                    user.getName(),
+                    user.getSurname(),
+                    user.getPassword()));
+        }
+        return result;
     }
 
 }

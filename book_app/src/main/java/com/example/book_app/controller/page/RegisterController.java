@@ -31,7 +31,7 @@ public class RegisterController {
                     newUser.getName(), newUser.getSurname(), newUser.getPassword()));
             model.addAttribute("success", true);
         } else {
-            throw new UsernameExistsException();
+            model.addAttribute("error", "A user with this username already exists.");
         }
         return "registerPage";
     }

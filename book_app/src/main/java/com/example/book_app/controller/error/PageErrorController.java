@@ -3,7 +3,6 @@ package com.example.book_app.controller.error;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.boot.web.servlet.error.ErrorController;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,15 +17,7 @@ public class PageErrorController implements ErrorController {
         if (status != null) {
             int statusCode = Integer.parseInt(status.toString());
 
-            //TODO: make attributes instead of html pages
-
-            if(statusCode == HttpStatus.FORBIDDEN.value()) {
-                return "error-403";
-            }
-
-            if (statusCode == HttpStatus.CONFLICT.value()) {
-                return "error-409";
-            }
+            model.addAttribute("error", request.getAttribute(RequestDispatcher.ERROR_MESSAGE));
 
         }
         return "error";

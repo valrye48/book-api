@@ -6,6 +6,8 @@ import com.example.book_app.dto.BookDto;
 import com.example.book_app.entity.Author;
 import com.example.book_app.entity.Book;
 import com.example.book_app.entity.User;
+import com.example.book_app.exception.BookDoesntExistException;
+import com.example.book_app.exception.UserDoesntExistException;
 import com.example.book_app.repository.AuthorRepository;
 import com.example.book_app.repository.BookRepository;
 import com.example.book_app.repository.UserRepository;
@@ -71,15 +73,19 @@ public class BookService {
         return result;
     }
 
-    public BookDto findBookById(Long bookId) {
+    public BookDto findBookById(Long bookId) throws BookDoesntExistException {
         var book = bookRepository.findById(bookId).orElse(null);
-        return new BookDto(book.getId(),
-                book.getTitle(),
-                book.getPublished_date(),
-                book.getPage_count(),
-                book.getAverage_rating(),
-                book.getLanguage(),
-                book.getDescription());
+        if (book != null) {
+            return new BookDto(book.getId(),
+                    book.getTitle(),
+                    book.getPublished_date(),
+                    book.getPage_count(),
+                    book.getAverage_rating(),
+                    book.getLanguage(),
+                    book.getDescription());
+        } else {
+            throw new BookDoesntExistException();
+        }
     }
 
     public ApiResultsDto getApiResultsForBook(String title, String authorSurname) {
@@ -87,7 +93,7 @@ public class BookService {
         return restTemplate.getForObject(url, ApiResultsDto.class);
     }
 
-    public void saveBook(ApiResultsDto apiResultsDto, Long userId) {
+    public void saveBook(ApiResultsDto apiResultsDto, Long userId) throws UserDoesntExistException, BookDoesntExistException {
 
         BookAndUsersDto bookResult = apiResultsDto.getItems().get(0).getVolumeInfo();
 
@@ -141,8 +147,11 @@ public class BookService {
         }
     }
 
-    public List<BookDto> getBooksOwnedByUser(Long userId) {
+    public List<BookDto> getBooksOwnedByUser(Long userId) throws UserDoesntExistException {
         var user = userRepository.findById(userId).orElse(null);
+        if (user == null) {
+            throw new UserDoesntExistException();
+        }
         var books = user.getBooks();
         List<BookDto> result = new ArrayList<>();
         if (books != null) {
@@ -157,7 +166,7 @@ public class BookService {
         return result;
     }
 
-    public void removeBook(Long bookId) {
+    public void removeBook(Long bookId) throws BookDoesntExistException {
         var book = bookRepository.findById(bookId).orElse(null);
         if (book != null) {
             var users = book.getUsers();
@@ -180,19 +189,26 @@ public class BookService {
                 }
             }
             bookRepository.delete(book);
+        } else {
+            throw new BookDoesntExistException();
         }
     }
 
-    public void removeBookFromUser(Long bookId, Long userId) {
+    public void removeBookFromUser(Long bookId, Long userId) throws BookDoesntExistException, UserDoesntExistException {
         var book = bookRepository.findById(bookId).orElse(null);
-        var user = userRepository.findById(userId).orElse(null);
-        if (book != null && user != null) {
-            if (user.getBooks().contains(book)) {
-                user.getBooks().remove(book);
-                userRepository.save(user);
-            }
-            bookRepository.delete(book);
+        if (book == null) {
+            throw new BookDoesntExistException();
         }
+        var user = userRepository.findById(userId).orElse(null);
+        if (user == null) {
+            throw new UserDoesntExistException();
+        }
+        if (user.getBooks().contains(book)) {
+            user.getBooks().remove(book);
+            userRepository.save(user);
+        }
+        book.getUsers().remove(user);
+        bookRepository.save(book);
     }
 
 }

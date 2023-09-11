@@ -93,6 +93,11 @@ public class BookService {
         return restTemplate.getForObject(url, ApiResultsDto.class);
     }
 
+    public ApiResultsDto getApiResultsForBookByTitle(String title) {
+        String url = baseUrl + "?q=" + title + "&key=" + apiKey;
+        return restTemplate.getForObject(url, ApiResultsDto.class);
+    }
+
     public void saveBook(ApiResultsDto apiResultsDto, Long userId) throws UserDoesntExistException, BookDoesntExistException {
 
         BookAndUsersDto bookResult = apiResultsDto.getItems().get(0).getVolumeInfo();

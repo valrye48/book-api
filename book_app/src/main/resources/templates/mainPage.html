@@ -1,10 +1,15 @@
 <!DOCTYPE html>
 <html xmlns:th="http:www.thymeleaf.org" lang="en">
-<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Main page</title>
     <link rel="stylesheet" href="page.css">
+    <script th:inline="javascript">
+        function showSearchResults() {
+            var title = document.getElementById("titleSearch").value;
+            window.location.href = '/mainPage/search/' + title;
+        }
+    </script>
 </head>
 <body>
 <div class="mainSection">
@@ -56,6 +61,17 @@
         <p th:if="${bookSaved}">Book added!</p>
 
         <p th:if="${error}" th:text="${error}"></p>
+
+    <br>
+    <br>
+
+        Search for a book by title:
+
+        <form>
+            Enter title: <input type="text" id="titleSearch" name="title">
+            <br>
+            <button type="button" th:onclick="showSearchResults()">Search</button>
+        </form>
 
     <br>
     <br>

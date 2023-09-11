@@ -36,7 +36,7 @@ body {
     border-top: 2px solid black;
 }
 
-input[type=text] {
+input[type=text], input[type=password] {
     padding: 10px 12px;
     margin: 8px 0;
     border-radius: 15px;

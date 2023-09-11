@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Home</title>
-    <link rel="stylesheet" href="home.css">
+    <link rel="stylesheet" href="page.css">
 </head>
 <body>
 <div class="mainSection">
-    <h1>Log in:</h1>
+    <h1><img th:src="@{/images/bookIcon.png}" width="50" height="50"/>&nbsp;Book Api</h1>
     <br>
     <br>
     <br>
@@ -21,7 +21,10 @@
     <br>
     <p th:if="${error}" th:text="${error}"></p>
     <br>
-    <a href="/register">Register</a>
+    <button type="button" th:onclick="|window.location.href='/register'|">Register</button>
 </div>
+<footer>
+    <a target="_blank" href="https://icons8.com/icon/37917/open-book">Book</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
+</footer>
 </body>
 </html>

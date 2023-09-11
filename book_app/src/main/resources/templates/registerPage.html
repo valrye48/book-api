@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Register</title>
-    <link rel="stylesheet" href="home.css">
+    <link rel="stylesheet" href="page.css">
 </head>
 <body>
     <div class="mainSection">
@@ -25,7 +25,7 @@
             <p th:if="${success}">Registered successfully!</p>
             <p th:if="${error}" th:text="${error}"></p>
             <br>
-            <a href="/home">Go back</a>
+            <button type="button" th:onclick="|window.location.href='/home'|">Go back</button>
         </form>
     </div>
 </body>

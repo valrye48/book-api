@@ -6,6 +6,43 @@
     <link rel="stylesheet" href="page.css">
 </head>
 <body>
+
+<!-- FIXME: css doesn't work here for some reason - maybe bc of the search/{title} url? -->
+
 Search results:
+
+<br>
+<br>
+
+<table class="table">
+    <tr class="table tr">
+        <th class="table td">Title</th>
+        <th class="table td">Published date</th>
+        <th class="table td">Page count</th>
+        <th class="table td">Average rating</th>
+        <th class="table td">Language</th>
+        <th class="table td">Authors</th>
+        <th class="table td">Description</th>
+    </tr>
+    <tr th:each="book : ${results}" style="text-align: left; border-bottom: 2px solid black;">
+        <td class="table td" th:text="${book.title}"></td>
+
+        <td class="table td" th:text="${book.published_date}"></td>
+
+        <td class="table td" th:text="${book.page_count}"></td>
+
+        <td class="table td" th:text="${book.average_rating}"></td>
+
+        <td class="table td" th:text="${book.language}"></td>
+
+        <td class="table td" th:text="${book.authors}"></td>
+
+        <td class="table td" th:text="${book.description}"></td>
+    </tr>
+</table>
+
+<br>
+<br>
+
 </body>
 </html>
